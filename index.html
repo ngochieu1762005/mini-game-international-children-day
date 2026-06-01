@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quốc tế Thiếu nhi 1/6</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="sky">
+    <span class="cloud c1"></span>
+    <span class="cloud c2"></span>
+    <span class="cloud c3"></span>
+    <span class="balloon b1"></span>
+    <span class="balloon b2"></span>
+    <span class="balloon b3"></span>
+  </div>
+
+  <header class="hero">
+    <nav class="nav">
+      <div class="logo">Ngày 1/6</div>
+      <a href="#gift">Mini tặng quà</a>
+    </nav>
+
+    <section class="hero-content">
+      <div class="hero-text">
+        <p class="badge">Happy International Children's Day</p>
+        <h1>Chúc các bé luôn vui như nắng, ngọt như kẹo và đáng yêu mỗi ngày!</h1>
+        <p class="desc">Một website nhỏ xinh cho Quốc tế Thiếu nhi, có lời chúc, hộp quà bí mật và câu đố để xin thêm lượt.</p>
+        <a class="btn" href="#gift">Chơi ngay</a>
+      </div>
+
+      <div class="hero-card" aria-label="cute bear card">
+        <div class="sun"></div>
+        <div class="bear">
+          <span class="ear left"></span>
+          <span class="ear right"></span>
+          <span class="face">
+            <i class="eye e1"></i>
+            <i class="eye e2"></i>
+            <i class="nose"></i>
+            <i class="smile"></i>
+          </span>
+        </div>
+        <div class="grass"></div>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section class="wishes">
+      <h2>Lời chúc nhỏ xinh</h2>
+      <div class="wish-grid">
+        <article>
+          <span>01</span>
+          <h3>Luôn tò mò</h3>
+          <p>Chúc các bé luôn thích khám phá, hỏi thật nhiều và học thật vui.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>Luôn mạnh khỏe</h3>
+          <p>Mong các bé ăn ngoan, ngủ ngon, lớn nhanh và luôn rạng rỡ.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>Luôn được yêu thương</h3>
+          <p>Mỗi ngày đều có thật nhiều tiếng cười, ôm ấm áp và niềm vui bé xíu.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="gift" class="gift-section">
+      <div class="gift-card">
+        <p class="mini">Mini game tặng quà</p>
+        <h2>Chọn 1 hộp quà bí mật</h2>
+        <p class="gift-note">Mỗi bé chỉ có <strong>1 lượt bốc quà</strong> trên thiết bị này. Muốn thêm lượt thì ib anh Hiếu hoặc giải câu đố để lấy mật mã.</p>
+
+        <div class="status-box">
+          <span id="turnText">Đang kiểm tra lượt chơi...</span>
+        </div>
+
+        <div class="gift-grid" id="giftGrid" aria-label="Danh sách hộp quà">
+          <button class="box" data-id="0"><span></span><b>1</b></button>
+          <button class="box" data-id="1"><span></span><b>2</b></button>
+          <button class="box" data-id="2"><span></span><b>3</b></button>
+          <button class="box" data-id="3"><span></span><b>4</b></button>
+          <button class="box" data-id="4"><span></span><b>5</b></button>
+          <button class="box" data-id="5"><span></span><b>6</b></button>
+        </div>
+
+        <div id="result" class="result">
+          <p>Bé hãy chọn một hộp quà nhé!</p>
+        </div>
+
+        <div class="gift-log-panel">
+          <div class="gift-log-head">
+            <h3>Danh sách quà đã bốc</h3>
+            <button id="downloadJsonBtn" type="button">Tải file JSON</button>
+          </div>
+          <p class="small gift-log-note">Sau khi bé chọn quà, tên món quà sẽ được lưu lại và tự tải file <strong>gift-results.json</strong> về máy.</p>
+          <div id="giftLogList" class="gift-log-list">
+            <p class="empty-log">Chưa có bé nào bốc quà trong trình duyệt này.</p>
+          </div>
+        </div>
+
+        <div class="unlock-panel">
+          <h3>Xin thêm lượt</h3>
+          <p class="small">Cách 1: nhập mật mã từ anh Hiếu. Cách 2: trả lời câu đố bên dưới.</p>
+
+          <div class="row">
+            <input id="passInput" type="text" placeholder="Nhập mật mã" autocomplete="off">
+            <button id="passBtn">Mở lượt</button>
+          </div>
+
+          <div class="riddle">
+            <p><strong>Câu đố:</strong> Bé ăn vào thì ngọt, nhiều màu thì càng xinh. Đó là gì?</p>
+            <div class="row">
+              <input id="riddleInput" type="text" placeholder="Nhập đáp án">
+              <button id="riddleBtn">Trả lời</button>
+            </div>
+          </div>
+
+          <p id="unlockMsg" class="unlock-msg"></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Made with love for Children's Day 1/6</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
