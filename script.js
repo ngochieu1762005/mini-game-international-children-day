@@ -1,14 +1,15 @@
 const gifts = [
   "Một cây kẹo mút cầu vồng",
-  "Một sticker siêu cute",
-  "Một gấu bông mini",
-  "Một vé được ôm thật lâu",
+  "Một vé đi xem film cùng anh Hiếu",
+  "Một gấu bông",
+  "Chúc bé may mắn lần sau",
   "Một chiếc bóng bay màu hồng",
   "Một phần bánh ngọt nhỏ xinh",
-  "Một lời khen: Bé hôm nay đáng yêu quá!",
-  "Một điều ước bí mật",
-  "Một hộp sữa nhỏ",
-  "Một phần snack yêu thích"
+  "Một vé đi xem film cùng anh Hiếu",
+  "Một thỏi son",
+  "Một chiếc váy mới",
+  "Một vé đi xem film cùng anh Hiếu",
+
 ];
 
 const STORE_KEY = "child_day_gift_picked_v2";
