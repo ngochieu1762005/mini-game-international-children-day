@@ -32,3 +32,10 @@ Nếu muốn khóa chính xác mỗi IP chỉ được bốc 1 lần, cần thê
 ## Lưu ý về bảo mật
 
 Bản này đã mã hóa đáp án bằng SHA-256 hash để khi mở DevTools/F12 không thấy mật mã và đáp án trực tiếp. Tuy nhiên đây vẫn là web tĩnh, nên không thể bảo mật tuyệt đối 100%. Người rành kỹ thuật vẫn có thể dò hash nếu đáp án quá dễ đoán. Muốn bảo mật thật sự cần đưa phần kiểm tra đáp án lên backend/server.
+
+## Cập nhật bản no-json
+
+- Đã bỏ chức năng tạo/tải file `gift-results.json`.
+- Khi bé chọn hộp quà, tên món quà vẫn hiện trực tiếp trên hộp và trong phần kết quả.
+- Cách xin thêm lượt bằng mật mã hoặc câu đố chỉ dùng được **1 lần trên mỗi trình duyệt/thiết bị**.
+- Sau khi đã mở thêm lượt thành công, ô nhập mật mã và câu đố sẽ bị khóa.

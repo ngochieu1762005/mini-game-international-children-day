@@ -114,82 +114,8 @@ footer { text-align:center; padding:30px; color:#9a7d8c; font-weight:700; }
   font-size: 16px;
 }
 
-.gift-log-panel {
-  margin-top: 18px;
-  padding: 18px;
-  border-radius: 26px;
-  background: #f3fbff;
-  border: 3px dashed #92dff7;
-  text-align: left;
-}
-
-.gift-log-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.gift-log-head h3 {
-  margin: 0;
-  color: #348aa6;
-  font-size: 26px;
-}
-
-.gift-log-head button {
-  border: 0;
-  border-radius: 999px;
-  padding: 10px 16px;
-  background: #89dff7;
-  color: #fff;
-  font-weight: 900;
-  font-size: 17px;
-  box-shadow: 0 10px 22px rgba(52,138,166,.18);
-}
-
-.gift-log-note {
-  margin-top: 8px;
-}
-
-.gift-log-list {
-  display: grid;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.gift-log-item {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 12px;
-  align-items: center;
-  padding: 12px;
-  border-radius: 18px;
-  background: #fff;
-  border: 2px solid #d9f5ff;
-}
-
-.gift-log-box {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 68px;
-  padding: 8px 10px;
-  border-radius: 999px;
-  background: #fff8df;
-  color: #b37b00;
-  font-weight: 900;
-}
-
-.gift-log-item strong {
-  display: block;
-  color: #ff679b;
-  font-size: 20px;
-}
-
-.gift-log-item p,
-.empty-log {
-  margin: 4px 0 0;
-  color: #7c6270;
-  font-size: 16px;
+.unlock-panel input:disabled,
+.unlock-panel button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }

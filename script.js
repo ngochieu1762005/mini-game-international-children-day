@@ -13,7 +13,7 @@ const gifts = [
 
 const STORE_KEY = "child_day_gift_picked_v2";
 const EXTRA_KEY = "child_day_extra_turn_v2";
-const GIFT_LOG_KEY = "child_day_gift_results_json_v1";
+const UNLOCK_USED_KEY = "child_day_unlock_used_v1";
 // Không để đáp án dạng chữ thường trong code.
 // Web sẽ băm SHA-256 câu trả lời người chơi rồi so với các hash bên dưới.
 // Lưu ý: web tĩnh chỉ che được khỏi việc nhìn thấy đáp án trực tiếp trong F12,
@@ -33,8 +33,6 @@ const passBtn = document.getElementById("passBtn");
 const riddleInput = document.getElementById("riddleInput");
 const riddleBtn = document.getElementById("riddleBtn");
 const unlockMsg = document.getElementById("unlockMsg");
-const giftLogList = document.getElementById("giftLogList");
-const downloadJsonBtn = document.getElementById("downloadJsonBtn");
 
 function hasPicked() {
   return localStorage.getItem(STORE_KEY) === "yes";
@@ -44,21 +42,30 @@ function hasExtraTurn() {
   return localStorage.getItem(EXTRA_KEY) === "yes";
 }
 
+function hasUsedExtraUnlock() {
+  return localStorage.getItem(UNLOCK_USED_KEY) === "yes";
+}
+
+function setExtraUnlockUsed() {
+  localStorage.setItem(UNLOCK_USED_KEY, "yes");
+}
+
 function setPicked() {
   localStorage.setItem(STORE_KEY, "yes");
   localStorage.removeItem(EXTRA_KEY);
 }
 
 function unlockTurn(message) {
+  if (hasUsedExtraUnlock()) {
+    unlockMsg.textContent = "Bé đã dùng quyền xin thêm lượt rồi, không mở thêm được nữa nha.";
+    return;
+  }
+
+  setExtraUnlockUsed();
   localStorage.setItem(EXTRA_KEY, "yes");
   unlockMsg.textContent = message;
   result.innerHTML = "<p>Bé đã có thêm 1 lượt. Chọn hộp quà đi nào!</p>";
-  if (downloadJsonBtn) {
-  downloadJsonBtn.addEventListener("click", downloadGiftJson);
-}
-
-updateState();
-renderGiftLogs();
+  updateState();
 }
 
 function canPlay() {
@@ -67,99 +74,24 @@ function canPlay() {
 
 function updateState() {
   const playable = canPlay();
+  const unlockUsed = hasUsedExtraUnlock();
   boxes.forEach(box => box.disabled = !playable);
+  if (passInput) passInput.disabled = unlockUsed;
+  if (passBtn) passBtn.disabled = unlockUsed;
+  if (riddleInput) riddleInput.disabled = unlockUsed;
+  if (riddleBtn) riddleBtn.disabled = unlockUsed;
 
   if (playable && !hasPicked()) {
     turnText.textContent = "Bé còn 1 lượt bốc quà.";
   } else if (playable && hasExtraTurn()) {
     turnText.textContent = "Bé có thêm 1 lượt đặc biệt.";
   } else {
-    turnText.textContent = "Bé đã bốc quà rồi. Muốn thêm lượt thì ib anh Hiếu hoặc giải đố nhé.";
+    if (hasUsedExtraUnlock()) {
+      turnText.textContent = "Bé đã dùng hết lượt và quyền xin thêm lượt trên thiết bị này.";
+    } else {
+      turnText.textContent = "Bé đã bốc quà rồi. Muốn thêm lượt thì ib anh Hiếu hoặc giải đố nhé.";
+    }
   }
-}
-
-
-function getGiftLogs() {
-  const raw = localStorage.getItem(GIFT_LOG_KEY);
-  if (!raw) return [];
-  try {
-    const logs = JSON.parse(raw);
-    return Array.isArray(logs) ? logs : [];
-  } catch (error) {
-    return [];
-  }
-}
-
-function saveGiftLog(boxId, gift) {
-  const logs = getGiftLogs();
-  const childNameInput = document.getElementById("wishName");
-  const childName = childNameInput && childNameInput.value.trim()
-    ? childNameInput.value.trim()
-    : "Bé chưa nhập tên";
-
-  const record = {
-    id: `gift-${Date.now()}`,
-    childName,
-    boxNumber: Number(boxId) + 1,
-    giftName: gift,
-    pickedAt: new Date().toISOString(),
-    pickedAtText: new Date().toLocaleString("vi-VN")
-  };
-
-  logs.push(record);
-  localStorage.setItem(GIFT_LOG_KEY, JSON.stringify(logs, null, 2));
-  renderGiftLogs();
-  downloadGiftJson();
-  return record;
-}
-
-function renderGiftLogs() {
-  if (!giftLogList) return;
-  const logs = getGiftLogs();
-
-  if (!logs.length) {
-    giftLogList.innerHTML = '<p class="empty-log">Chưa có bé nào bốc quà trong trình duyệt này.</p>';
-    return;
-  }
-
-  giftLogList.innerHTML = logs.slice().reverse().map(item => `
-    <div class="gift-log-item">
-      <span class="gift-log-box">Hộp ${item.boxNumber}</span>
-      <div>
-        <strong>${escapeHtml(item.giftName)}</strong>
-        <p>${escapeHtml(item.childName)} • ${escapeHtml(item.pickedAtText)}</p>
-      </div>
-    </div>
-  `).join("");
-}
-
-function downloadGiftJson() {
-  const logs = getGiftLogs();
-  const data = {
-    website: "Mini game Quốc tế Thiếu nhi 1/6",
-    exportedAt: new Date().toISOString(),
-    total: logs.length,
-    results: logs
-  };
-
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "gift-results.json";
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-}
-
-function escapeHtml(text) {
-  return String(text)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
 }
 
 
@@ -179,21 +111,15 @@ function pickGift(box) {
   box.innerHTML = `<span></span><b>🎁</b><em>${gift}</em>`;
   setPicked();
 
-  const savedRecord = saveGiftLog(boxId, gift);
   result.innerHTML = `
     <p>
       Chúc mừng bé nhận được:<br>
       <strong>${gift}</strong><br>
-      <small>Đã lưu vào file <b>gift-results.json</b> • Hộp số ${savedRecord.boxNumber}</small>
+      <small>Hộp số ${Number(boxId) + 1}</small>
     </p>
   `;
   createConfetti();
-  if (downloadJsonBtn) {
-  downloadJsonBtn.addEventListener("click", downloadGiftJson);
-}
-
-updateState();
-renderGiftLogs();
+  updateState();
 }
 
 
@@ -240,6 +166,10 @@ boxes.forEach(box => {
 });
 
 passBtn.addEventListener("click", async () => {
+  if (hasUsedExtraUnlock()) {
+    unlockMsg.textContent = "Bé đã dùng quyền xin thêm lượt rồi, không nhập mật mã thêm được nữa nha.";
+    return;
+  }
   const ok = await isHashMatch(passInput.value, [SECRET_CODE_HASH]);
   if (ok) {
     unlockTurn("Đúng mật mã rồi! Anh Hiếu cho bé thêm 1 lượt.");
@@ -250,6 +180,10 @@ passBtn.addEventListener("click", async () => {
 });
 
 riddleBtn.addEventListener("click", async () => {
+  if (hasUsedExtraUnlock()) {
+    unlockMsg.textContent = "Bé đã dùng quyền giải đố xin thêm lượt rồi, không mở thêm lần nữa nha.";
+    return;
+  }
   const ok = await isHashMatch(riddleInput.value, RIDDLE_ANSWER_HASHES);
   if (ok) {
     unlockTurn("Giỏi quá! Đáp án đúng, bé nhận thêm 1 lượt.");
@@ -259,9 +193,4 @@ riddleBtn.addEventListener("click", async () => {
   }
 });
 
-if (downloadJsonBtn) {
-  downloadJsonBtn.addEventListener("click", downloadGiftJson);
-}
-
 updateState();
-renderGiftLogs();
